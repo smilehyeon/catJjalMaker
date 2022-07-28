@@ -53,13 +53,18 @@
       );
     }
 
-    const MainCard = ({ img, alt }) =>
-    (
-      <div className="main-card">
-        <img src={img} alt={alt} width="400" />
-        <button>🤍</button>
-      </div>
-    );
+    const MainCard = ({ img, alt }) => {
+      function handleHeartClick() {
+        console.log("버튼 클릭");
+      }
+      return (
+        <div className="main-card">
+          <img src={img} alt={alt} width="400" />
+          <button onClick={handleHeartClick}>🤍</button>
+        </div>
+      );
+    }
+
 
 
     const title = (
@@ -79,17 +84,22 @@
     //   </form>
     // );
 
-    const Form = () => (
-      <form>
-        <input type="text" name="name" placeholder="영어 대사를 입력해주세요" />
-        <button type="submit">생성</button>
-      </form>
-    );
+    const Form = () => {
+      function handleFormSubmit(event) {
+        event.preventDefault();
+        console.log("폼 전송됨");
+      }
+      return (
+        <form onSubmit={handleFormSubmit}>
+          <input type="text" name="name" placeholder="영어 대사를 입력해주세요" />
+          <button type="submit">생성</button>
+        </form>
+      )
+    };
 
     const app = (
       <div>
         <Title>1번째 고양이 가라사대</Title>
-        <Title>2번째 고양이 가라사대</Title>
         <Form />
         <MainCard img="https://cataas.com/cat/60b73094e04e18001194a309/says/react" alt="고양이" />
         <Favorites />
