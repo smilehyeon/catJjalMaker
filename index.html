@@ -73,14 +73,40 @@
       );
     }
 
-    const Form = ({ handleFormSubmit }) => {
+    const Form = () => {
+      const includesHangul = (text) => /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/i.test(text);
+      const [value, setValue] = React.useState('');
+      const [errorMessage, setErrorMessage] = React.useState('');
+
+      function handleInputChange(e) {
+        const usrValue = e.target.value;
+        setErrorMessage('');
+        if (includesHangul(usrValue)) {
+          setErrorMessage('한글은 입력할 수 없습니다.');
+        }
+        setValue(usrValue.toUpperCase());
+      }
+
+
+      function handleFormSubmit(e) {
+        e.preventDefault();
+        setErrorMessage("");
+
+        if (value === "") {
+          setErrorMessage("빈 값으로 만들 수 없습니다.");
+        }
+      }
+
       return (
         <form onSubmit={handleFormSubmit}>
-          <input type="text" name="name" placeholder="영어 대사를 입력해주세요" />
+          <input type="text" name="name" placeholder="영어 대사를 입력해주세요" onChange={handleInputChange} value={value} />
           <button type="submit">생성</button>
+          <p style={{ color: "red" }}>{errorMessage}</p>
         </form>
       )
-    };
+
+    }
+
 
     const App = () => {
       const CAT1 = "https://cataas.com/cat/60b73094e04e18001194a309/says/react";
@@ -93,9 +119,9 @@
 
       function handleFormSubmit(event) {
         event.preventDefault();
-        console.log("폼 전송됨");
         setCounter(counter + 1);
         setMainCatImg(CAT2);
+        console.log("gg");
       }
 
       function handleHeartClick() {
