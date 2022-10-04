@@ -95,6 +95,7 @@
     };
 
     function CatItem(props) {
+      console.log(props);
       return (
         <li>
           <img src={props.img} style={{ width: "150px" }} />
@@ -129,16 +130,17 @@
     };
 
     const App = () => {
+      const [counter, setCounter] = React.useState(() => {
+        return jsonLocalStorage.getItem(counter);
+      });
 
-      const [counter, setCounter] = React.useState(jsonLocalStorage.getItem("counter"));
       const [mainCat, setMainCat] = React.useState(React.useEffect(() => {
         setInitialCat();
       }, []));
-      const [favorites, setFavorites] = React.useState(jsonLocalStorage.getItem("favorites") || []);
 
-      // React.useEffect(() => {
-      //   setInitialCat();
-      // }, []);
+      const [favorites, setFavorites] = React.useState(() => {
+        return jsonLocalStorage.getItem("favorites") || [];
+      });
 
       const alredyFav = favorites.includes(mainCat);
       const title = counter == null ? '고양이 가라사대' : counter + ' 번째 가라사대';
@@ -151,9 +153,11 @@
       async function updateMainCat(value) {
         const newCat = await fetchCat(value);
         setMainCat(newCat);
-        const nextCounter = counter + 1;
-        setCounter(nextCounter);
-        jsonLocalStorage.setItem("counter", nextCounter);
+        setCounter((prev) => {
+          const nextCounter = prev + 1;
+          jsonLocalStorage.setItem("counter", nextCounter);
+          return nextCounter;
+        });
       }
 
       function handleHeartClick() {
